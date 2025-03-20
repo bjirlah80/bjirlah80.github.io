@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashlight Auto ON</title>
+</head>
+<body>
+    <h1>Flashlight Akan Menyala Otomatis</h1>
+    <p>Jika flashlight tidak menyala, pastikan Anda memberikan izin akses kamera.</p>
+
+    <script>
+        async function turnOnFlashlight() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                const track = stream.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+
+                if (capabilities.torch) {
+                    await track.applyConstraints({ advanced: [{ torch: true }] });
+                } else {
+                    console.log("Flashlight tidak didukung di perangkat ini.");
+                }
+            } catch (error) {
+                console.error("Gagal mengakses flashlight:", error);
+            }
+        }
+
+        // Panggil fungsi saat halaman dimuat
+        window.onload = turnOnFlashlight;
+    </script>
+</body>
+</html>
