@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aktifkan Senter</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <h2>Aktifkan Senter</h2>
+    <p>Klik tombol di bawah ini untuk menyalakan senter.</p>
+    <button onclick="nyalakanSenter()">Nyalakan</button>
+
+    <script>
+        function nyalakanSenter() {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then((stream) => {
+                const track = stream.getVideoTracks()[0];
+                const imageCapture = new ImageCapture(track);
+                imageCapture.getPhotoCapabilities().then(() => {
+                    track.applyConstraints({ advanced: [{ torch: true }] });
+                });
+            })
+            .catch((err) => alert("Akses kamera ditolak atau perangkat tidak mendukung."));
+        }
+    </script>
+</body>
+</html>
